@@ -25,6 +25,7 @@ public class CategoryServicelmpl implements CategoryService {
 
     /**
      * 新增菜品分类
+     *
      * @param categoryDTO
      */
     public void save(CategoryDTO categoryDTO) {
@@ -36,18 +37,19 @@ public class CategoryServicelmpl implements CategoryService {
         category.setStatus(StatusConstant.ENABLE);
 
         // 设置创建时间
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
+//        category.setCreateTime(LocalDateTime.now());
+//        category.setUpdateTime(LocalDateTime.now());
 
         // 设置创建人
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setCreateUser(BaseContext.getCurrentId());
+//        category.setUpdateUser(BaseContext.getCurrentId());
 
         categoryMapper.insert(category);
     }
 
     /**
      * 分页查询菜品分类
+     *
      * @param categoryPageQueryDTO
      * @return
      */
@@ -59,5 +61,52 @@ public class CategoryServicelmpl implements CategoryService {
         long total = page.getTotal();
         List<Category> records = page.getResult();
         return new PageResult(total, records);
+    }
+
+    /**
+     * 启用或禁用菜品分类
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Category category = Category.builder()
+                .status(status)
+                .id(id)
+                .build();
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 删除菜品分类
+     * @param id
+     */
+    @Override
+    public void deleteById(Long id) {
+        categoryMapper.deleteById(id);
+    }
+
+    /**
+     * 修改分类
+     * @param categoryDTO
+     */
+    @Override
+    public void update(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO, category);
+
+//        category.setUpdateTime(LocalDateTime.now());
+//        category.setUpdateUser(BaseContext.getCurrentId());
+
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 按类型查询分类
+     * @return
+     */
+    @Override
+    public List<Category> list(Integer type) {
+        return categoryMapper.list(type);
     }
 }
